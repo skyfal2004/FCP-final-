@@ -1,0 +1,48 @@
+import random
+import numpy as np
+import matplotlib.pyplot as plt
+def defuant_main(Coupling, Threshold,testime):
+    array = np.random.uniform(low = 0,high = 1,size=100)
+    array_2d = []
+    for i in range(testime*100):
+        position_random_element = random.randrange(len(array))
+        if position_random_element == 0:
+            random_element_neighbor = position_random_element + 1
+            # print('the random element is the first number and it has no left side neighbor')
+        elif position_random_element == len(array) -1:
+            random_element_neighbor= position_random_element - 1
+            # print('the random element is the final number and it has no right side neighbor')
+        else:
+            random_element_neighbor = position_random_element +random.choice([1,-1])
+        if abs(array[random_element_neighbor] - array[position_random_element]) < Threshold:
+            temp = array[position_random_element]
+            array[position_random_element] = array[position_random_element] +Coupling*(array[random_element_neighbor] - array[position_random_element])
+            array[random_element_neighbor] = array[random_element_neighbor] + Coupling*(temp - array[random_element_neighbor])
+        if i % 100 == 0:
+            array_2d.append(array.copy())
+        # elif abs(array[random_element_neighbor] - array[random_element]) > Threshold:
+        #     print('the two selected people have a difference of opinion greater than a threshold')
+    plt.hist(array, bins=10, range = (0.0, 1.0), edgecolor='black')
+    plt.xlabel('opinion')
+    plt.ylabel('time')
+    plt.xlim(0, 1)
+    plt.show()
+
+
+    rows = len(array_2d)
+    cols = len(array_2d[0])
+
+
+    for row in range(rows):
+        plt.scatter([row] * cols, array_2d[row], c='red')
+
+    plt.xlabel('Row Number')
+    plt.ylabel('Value')
+    plt.title('Scatter Plot of 2D Array Data')
+    plt.ylim(0.0, 1.0)
+    plt.legend()
+    plt.show()
+defuant_main(0.5,0.5,100)
+defuant_main(0.1,0.5,100)
+defuant_main(0.5,0.1,100)
+defuant_main(0.1,0.1,100)
