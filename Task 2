@@ -1,10 +1,11 @@
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-def defuant_main(Coupling, Threshold,testime):
+import sys
+def defuant_main(Threshold = 0.2, Coupling = 0.2, testTimes = 100):
     array = np.random.uniform(low = 0,high = 1,size=100)
     array_2d = []
-    for i in range(testime*100):
+    for i in range(testTimes*100):
         position_random_element = random.randrange(len(array))
         if position_random_element == 0:
             random_element_neighbor = position_random_element + 1
@@ -22,27 +23,57 @@ def defuant_main(Coupling, Threshold,testime):
             array_2d.append(array.copy())
         # elif abs(array[random_element_neighbor] - array[random_element]) > Threshold:
         #     print('the two selected people have a difference of opinion greater than a threshold')
-    plt.hist(array, bins=10, range = (0.0, 1.0), edgecolor='black')
-    plt.xlabel('opinion')
-    plt.ylabel('time')
-    plt.xlim(0, 1)
-    plt.show()
+
 
 
     rows = len(array_2d)
     cols = len(array_2d[0])
 
 
+
+    fig, (ax1, ax2) = plt.subplots(1,2,figsize=(7,5))
+    ax1.hist(array, bins=10, range = (0.0, 1.0), edgecolor='black')
+
+    ax1.set_xlabel('opinion')
+    ax1.set_ylabel('time')
+    ax1.set_xlim(0, 1)
+    rows = len(array_2d)
+    cols = len(array_2d[0])
     for row in range(rows):
         plt.scatter([row] * cols, array_2d[row], c='red')
-
-    plt.xlabel('Row Number')
-    plt.ylabel('Value')
-    plt.title('Scatter Plot of 2D Array Data')
-    plt.ylim(0.0, 1.0)
-    plt.legend()
+    ax2.set_ylim(0.0,1.0)
+    ax2.set_xlim(1,testTimes)
+    ax2.set_xlabel('Times')
+    ax2.set_ylabel('Opinion')
+    plt.suptitle('Coupling ='+ str(Coupling)+ ', Threshold =' +str(Threshold))
     plt.show()
-defuant_main(0.5,0.5,100)
-defuant_main(0.1,0.5,100)
-defuant_main(0.5,0.1,100)
-defuant_main(0.1,0.1,100)
+    pass
+
+
+
+def test_defuant():
+    defuant_main(Coupling=0.5,Threshold=0.5)
+    defuant_main(Coupling=0.5,Threshold=0.1)
+    defuant_main(Coupling=0.1,Threshold=0.5)
+    defuant_main(Coupling=0.1,Threshold=0.1)
+    pass
+
+
+def main():
+    arg = sys.argv
+    if arg[1] == "-defuant":
+        if len(arg) == 2:
+            defuant_main(Threshold=0.2, Coupling=0.2)
+        elif len(arg) == 4:
+            if arg[2] == "-beta":
+                defuant_main(Threshold=0.2, Coupling=float(arg[3]))
+            if arg[2] == "-threshold":
+                defuant_main(Threshold=float(arg[3]), Coupling=0.2)
+        elif len(arg) == 6:
+            defuant_main(Threshold=float(arg[arg.index("-threshold") + 1]), Coupling=float(arg[arg.index("-beta") + 1]))
+    if arg[1] == "-test_defuant":
+        test_defuant()
+    pass
+
+if __name__ == '__main__':
+    main()
