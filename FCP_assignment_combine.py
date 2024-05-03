@@ -525,6 +525,7 @@ def main():
         print("Clustering co-efficient:", network.get_mean_clustering())
     if args.test_network:
         test_networks()
+
     #Task 4
     if args.small_world is not None:
         N = args.small_world if args.small_world is not None else args.N
