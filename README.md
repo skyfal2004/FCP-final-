@@ -1,4 +1,4 @@
-## Defuant Model Network 
+# Defuant Model Network 
 
 ## Overview
 This script simulates the formation and evolution of opinions within a small-world network using the Defuant model.
