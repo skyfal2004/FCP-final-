@@ -55,8 +55,7 @@ class Network:
             neighbour_count = len(neighbour_indices)
             if (neighbour_count < 2):
                 continue
-            possible_triangles = neighbour_count * (
-                        neighbour_count - 1) / 2  # Calculate the possible number of triangles, which is the combination of the number of neighbors
+            possible_triangles = neighbour_count * (neighbour_count - 1) / 2  # Calculate the possible number of triangles, which is the combination of the number of neighbors
             actual_triangles = sum(sum(self.nodes[neighbour_index].connections[j] for j in neighbour_indices[i + 1:])
                                    # Calculate the actual number of triangles formed by the node
                                    for i, neighbour_index in enumerate(neighbour_indices))
@@ -106,33 +105,6 @@ class Network:
                 if np.random.random() < connection_probability:
                     node.connections[neighbour_index] = 1
                     self.nodes[neighbour_index].connections[index] = 1
-
-
-    def plot(self):
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.set_axis_off()
-
-        num_nodes = len(self.nodes)
-        network_radius = num_nodes * 10
-        ax.set_xlim([-1.1 * network_radius, 1.1 * network_radius])
-        ax.set_ylim([-1.1 * network_radius, 1.1 * network_radius])
-
-        for (i, node) in enumerate(self.nodes):
-            node_angle = i * 2 * np.pi / num_nodes
-            node_x = network_radius * np.cos(node_angle)
-            node_y = network_radius * np.sin(node_angle)
-
-            circle = plt.Circle((node_x, node_y), 0.3 * num_nodes, color=cm.hot(node.value))
-            ax.add_patch(circle)
-
-            for neighbour_index in range(i + 1, num_nodes):
-                if node.connections[neighbour_index]:
-                    neighbour_angle = neighbour_index * 2 * np.pi / num_nodes
-                    neighbour_x = network_radius * np.cos(neighbour_angle)
-                    neighbour_y = network_radius * np.sin(neighbour_angle)
-
-                    ax.plot((node_x, neighbour_x), (node_y, neighbour_y), color='black')
 
     def make_ring_network(self, N, neighbour_range=2):
         '''
@@ -252,10 +224,8 @@ def calculate_agreement(population, row, col, external=0.0):
     if row < 0 or col < 0:
         raise ValueError("row and col must be >= 0")
     #return np.random.random() * population
-    # 获取矩阵的尺寸
     num_rows = population.shape[0]
     num_cols = population.shape[1]
-    # 先找邻居
     neighbours = []
 
     if row > 0:
@@ -340,7 +310,7 @@ def ising_main(population, alpha, external):
     ax = fig.add_subplot(111)
     ax.set_axis_off()
 
-    # 先拉开两个值的距离
+
     new_im = np.array([[255 if val == 1 else 1 for val in rows] for rows in population])
 
     im = ax.imshow(new_im, interpolation='none', cmap='RdPu_r')
